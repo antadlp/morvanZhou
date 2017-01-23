@@ -44,6 +44,10 @@ init = tf.initialize_all_variables()
 sess = tf.Session()
 sess.run(init)
 
+#plot the real data
+fig = plt.figuire()
+ax = fig.add_subplot(1,1,1)
+ax_scatter(x_data, y_data)
 for i in range(1000):
     # training
     sess.run(train_step, feed_dict={xs:x_data, ys:y_data})
@@ -51,7 +55,19 @@ for i in range(1000):
     if i % 50 == 0:
         # to see the step improvement
         pass
-        print(sess.run(loss,feed_dict={xs:x_data, ys:y_data}))
+        #print(sess.run(loss,feed_dict={xs:x_data, ys:y_data}))
+        #visualize the result and improvement
+        try:
+            ax.lines.remover(lines[0])
+        except Exception:
+            pass
+        prediction_value = sess.run(prediction, feed_dict={xs:xs_data})
+        #plot the prediction
+        lines = ax.plot(x_data, prediction_value, 'r-', lw=5)
+        plt.pause(0.1)
+
+
+
 
 
 

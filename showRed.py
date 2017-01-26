@@ -13,13 +13,14 @@ def add_layer(inputs, in_size, out_size, n_layer), \
             tf.histogram_summary(layer_name+"/weights", Weights)
         with tf.name_scope("biases"):
             biases = tf.Variable(tf.zeros([1, out_size]) + 0.1)
-            tf.histogram_summary(layer_name+"/weights", Weights)
+            tf.histogram_summary(layer_name+"/biases", biases)
         with tf.name_scope("inputs"):
             Wx_plus_b = tf.matmul(inputs, Weights) + biases
         if activation_function is None:
             outputs = Wx_plus_b
         else:
             outputs = activation_function(Wx_plus_b)
+            tf.histogram_summary(layer_name+"/outputs", outputs)
         return outputs
 
 
@@ -57,11 +58,18 @@ with tf.name_scope("train"):
 
 
 sess = tf.Session()
+merged = tf.merge_all_summaries()
 writer = tf.summary.FileWriter("logs/",sess.graph)
 
 #the important step
 init = tf.global_variables_initializer()
 sess.run(init)
+
+for i in range(1000):
+    sess.run(train_step, feed_dict={xs:x_data, ys:y_data})
+    if i % 50 == 0
+    result = sess.run(merged,feed_dict={xs:x_data, ys:y_data})
+    writter.add_summary(result,i)
 
 #plot the real data
 fig = plt.figure()

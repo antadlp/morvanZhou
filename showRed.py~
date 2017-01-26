@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-def add_layer(inputs, in_size, out_size, n_layer), \
+def add_layer(inputs, in_size, out_size, n_layer, \
         activation_function=None):
     # add one more layer and return the output of this layer
     layer_name = "layer%s" % n_layer
@@ -41,10 +41,12 @@ with tf.name_scope("inputs"):
     ys = tf.placeholder(tf.float32, [None, 1], name='y_inputs')
 
 #add hidden layers
-l1 = add_layer(xs, 1, 10, activation_function=tf.nn.relu)
+l1 = add_layer(xs, 1, 10, n_layer=1, \
+        activation_function=tf.nn.relu)
 
 #add output layer
-prediction = add_layer(l1, 10, 1, activation_function=None)
+prediction = add_layer(l1, 10, 1, n_layer=2, \
+        activation_function=None)
 
 #the error between prediction and real data
 
@@ -64,6 +66,13 @@ writer = tf.summary.FileWriter("logs/",sess.graph)
 #the important step
 init = tf.global_variables_initializer()
 sess.run(init)
+
+for i in range(1000):
+    sess.run(train_step, feed_dict={xs:x_data, ys:y_data})
+    if i % 50 == 0:
+        result = sess.run(merged,feed_dict={xs:x_data, \
+            ys:y_data})
+        writer.add_summary(result,i)
 
 #plot the real data
 fig = plt.figure()

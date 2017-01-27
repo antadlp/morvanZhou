@@ -1,0 +1,22 @@
+import tensorflow as tf
+from sklearn.datasets import train_test_split
+from sklearn.cross_validation import train_test_split
+from sklearn.prepocessing import LabelBinarizer
+
+#load data
+digits = load_digits()
+x = digits.data
+y = digits.target
+y = LabelBinarizer().fit_transform(y)
+X_train, X_test, y_train, y_test = train_test_split(X, y, \
+        test_size=0.3)
+
+
+def add_layer(inputs, in_size, out_size, layer_name, \
+        activation_function=None, ):
+    # add one more layer and return the output of this layer
+    Weights = tf.Variable(tf.random_normal([in_size, out_size]))
+    biases = tf.Variable(tf.zeros([1, out_size]) + 0.1,)
+    Wx_plus_b = tf.matmul(inputs, Weights) + biases
+
+

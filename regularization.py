@@ -1,5 +1,5 @@
 import tensorflow as tf
-from sklearn.datasets import train_test_split
+from sklearn.datasets import load_digits 
 from sklearn.cross_validation import train_test_split
 from sklearn.prepocessing import LabelBinarizer
 
@@ -44,6 +44,40 @@ cross_entropy = tf.reduce_mean(-tf.reduce_sum(ys* \
 
 
 tf.scalar_summary('loss', cross_entropy)
+train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+
+sess = tf.Session()
+merged = tf.merge_all_summaries()
+#summary writer goes in here
+train_writer = tf.train.SummaryWriter("logs/train", sess.graph)
+train_writer = tf.train.SummaryWriter("logs/test", sess.graph)
+
+#tf.initialize_all_variables no longer valid from 
+#2017-03-02
+if int((tf.__version__).split('.')[1]) < 12:
+    init = tf.initialize_all_variables()
+else:   
+    init = tf.global_variables_initializer()
+    sess.run(init)
+
+
+for i in range(500):
+    #here to determine the keeping probability
+    sess.run(train_step, feed_dict={xs: X_train, ys: y_train, \
+            keep_prob: 0.5})
+
+    if i % 50 == 0:
+    # record loss
+        train_result = sess.run(merged, feed_dict={xs: X_train, \
+                ys: y_train, keep_prob: 1})
+        test_result = sess.run(merged, feed_dict={xs: X_test, \
+                ys: y_test, keep_prob: 1})
+        train_writer.add_summary(train_result, i)
+        test_writer.add_summary(test_result, i)
+
+
+
+
 
     
 

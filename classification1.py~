@@ -38,7 +38,7 @@ def compute_accuracy(v_xs, v_ys):
 
 # define placeholders for inputs to network
 xs = tf.placeholder(tf.float32, [None, 784]) #28*28 = 784
-xs = tf.placeholder(tf.float32, [None, 10]) 
+ys = tf.placeholder(tf.float32, [None, 10]) 
 
 # add output layer
 prediction = add_layer(xs, 784, 10, \
@@ -55,7 +55,15 @@ tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 sess = tf.Session()
 
 #important step
-sess.run(tf.initialize_all_variables())
+# sess.run(tf.initialize_all_variables())
+
+if int((tf.__version__).split('.')[1]) < 12:
+    init = tf.initialize_all_variables()
+else:
+    init = tf.global_variables_initializer()
+sess.run(init)
+
+
 
 for i in range(1000):
     batch_xs, batch_ys = mnist.train.next_batch(100)

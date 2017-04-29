@@ -42,6 +42,14 @@ keep_prob = tf.placeholder(tf.float32)
 x_image = tf.reshape(xs, [-1, 28, 28, 1])
 # print(x_image.shape)  # [n_samples, 28,28,1]
 
+# conv1 layer ###
+W_conv1 = weight_variable([5, 5, 1, 32])
+b_conv1 = bias_variable([32])
+h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1) # output size 28x28x32
+h_pool1 = max_pool_2x2(h_conv1)
+
+
+
 
 
 sess = tf.Session()

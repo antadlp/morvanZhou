@@ -1,3 +1,9 @@
+#from:
+#https://www.youtube.com/watch?v=hSDrJM6fJFM&list=PLXO45tsB95cJHXaDKpbwr5fC_CCYylw1f&index=19
+#https://github.com/MorvanZhou/tutorials/blob/master/tensorflowTUT/tf18_CNN3/full_code.py
+
+
+
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 
